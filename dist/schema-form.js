@@ -531,14 +531,19 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                                     });
                 }
 
-                templatePromise.then(function(template) {
+                 templatePromise.then(function(template) {
                   if (form.key) {
                     var key = form.key ?
                               sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                    template = template.replace(
-                      /\$\$value\$\$/g,
-                      'model' + (key[0] !== '[' ? '.' : '') + key
-                    );
+
+                    var modelReplacement = 'model' + (key[0] !== '[' ? '.' : '') + key;
+
+                    if(form.model) {
+                      modelReplacement = form.model;
+                    }
+
+                    template = template.replace(/\$\$value\$\$/g, modelReplacement);
+
                   }
                   element.html(template);
 
